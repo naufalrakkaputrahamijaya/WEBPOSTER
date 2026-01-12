@@ -1,0 +1,12 @@
+{
+  "name": "spatial-realtime",
+  "version": "1.0.0",
+  "description": "Simple WebSocket server to broadcast table changes for SPATIAL poster",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ws": "^8.13.0"
+  }
+}

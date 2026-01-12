@@ -344,6 +344,38 @@
 
         let detailData = loadDetail();
 
+        // --- Real-time sync via WebSocket ---
+        let ws = null; let wsConnected = false; const WS_RETRY_MS = 3000;
+        const WS_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'ws://localhost:8080' : (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + ':8080';
+
+        function setupWebSocket(){
+            try{
+                ws = new WebSocket(WS_URL);
+            }catch(e){ ws = null; return scheduleWsReconnect(); }
+            ws.addEventListener('open', ()=>{ wsConnected = true; console.log('WS connected', WS_URL); });
+            ws.addEventListener('message', (ev)=>{
+                try{ const msg = JSON.parse(ev.data);
+                    if(msg.type === 'init' && Array.isArray(msg.data)){
+                        // use server state (but prefer local saved if exists)
+                        const local = localStorage.getItem(STORAGE_KEY);
+                        if(!local){ detailData = msg.data; saveDetail(detailData); updateChartAndTable(); }
+                    }
+                    if(msg.type === 'update' && Array.isArray(msg.data)){
+                        detailData = msg.data;
+                        saveDetail(detailData);
+                        updateChartAndTable();
+                    }
+                }catch(e){ console.warn('WS msg parse', e); }
+            });
+            ws.addEventListener('close', ()=>{ wsConnected = false; console.log('WS closed'); scheduleWsReconnect(); });
+            ws.addEventListener('error', (e)=>{ wsConnected = false; console.warn('WS error', e); ws.close && ws.close(); scheduleWsReconnect(); });
+        }
+
+        let wsReconnectTimer = null;
+        function scheduleWsReconnect(){ if(wsReconnectTimer) return; wsReconnectTimer = setTimeout(()=>{ wsReconnectTimer=null; setupWebSocket(); }, WS_RETRY_MS); }
+        // start websocket (best-effort). If server not present, client continues to work offline.
+        setupWebSocket();
+
         // chart setup
         const ctx = document.getElementById('myChart').getContext('2d');
         const barColors = ['#27ae60', '#2980b9', '#8e44ad', '#f39c12', '#d35400', '#c0392b', '#16a085', '#34495e', '#7f8c8d'];
@@ -474,6 +506,8 @@
                 });
                 saveDetail(detailData);
                 updateChartAndTable();
+                // broadcast to server if connected
+                try{ if(ws && wsConnected){ ws.send(JSON.stringify({ type:'update', data: detailData })); } }catch(e){ console.warn('ws send failed', e); }
                 if(bsEditModal) bsEditModal.hide();
             });
         }
