@@ -1,14 +1,14 @@
 // Data poin klasemen untuk 9 tim
 const klasemenPoin = [
-  { name: 'Geo Kusala', poin: 64 },
-  { name: 'Aero Netra', poin: 55 },
-  { name: 'Jalacise', poin: 66 },
-  { name: 'Vajra Vium', poin: 92 },
-  { name: 'Dhatu Stream', poin: 47 },
-  { name: 'Infra Luhita', poin: 68 },
-  { name: 'Loka Map', poin: 82 },
-  { name: 'Nira Nautika', poin: 58 },
-  { name: 'Giridera', poin: 52
+  { name: 'Geo Kusala', poin: 89.1 },
+  { name: 'Aero Netra', poin: 86.7 },
+  { name: 'Jalacise', poin: 90.9 },
+  { name: 'Vajra Vium', poin: 87.9 },
+  { name: 'Dhatu Stream', poin: 86.3 },
+  { name: 'Infra Luhita', poin: 81.4 },
+  { name: 'Loka Map', poin: 85.6 },
+  { name: 'Nira Nautika', poin: 91.15 },
+  { name: 'Giridera', poin: 89.35
     
    }
 ];
