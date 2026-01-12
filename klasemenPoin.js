@@ -8,7 +8,7 @@ const klasemenPoin = [
   { name: 'Infra Luhita', poin: 81.4 },
   { name: 'Loka Map', poin: 85.6 },
   { name: 'Nira Nautika', poin: 91.15 },
-  { name: 'Giridera', poin: 89.35
+  { name: 'Giridera', poin: 89.3
     
    }
 ];
