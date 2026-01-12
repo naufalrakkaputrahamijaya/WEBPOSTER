@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Website SPATIAL, Departemen Teknologi Kebumian UGM.">
+    <meta name="keywords" content="SPATIAL, UGM, DTK">
+    <meta name="author" content="Panitia SPATIAL 2025/2026">
+    <title>Klasemen Gugus SPATIAL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Dekorasi bumi dan bulu phoenix */
+        .earth-deco {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 2.5em;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+            z-index: 2;
+        }
+        .phoenix-feather {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 72px;
+            height: auto;
+            display: block;
+            z-index: 1000;
+            pointer-events: none;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25));
+            animation: featherFloat 3s infinite ease-in-out;
+        }
+
+        .phoenix-feather-fallback {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            font-size: 48px;
+            line-height: 1;
+            z-index: 1000;
+            pointer-events: none;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25));
+            animation: featherFloat 3s infinite ease-in-out;
+        }
+        @keyframes featherFloat {
+            0%, 100% { transform: translateY(0) rotate(-10deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+        .nature-icons {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-bottom: 10px;
+        }
+        .nature-icons span {
+            font-size: 1.7em;
+            filter: drop-shadow(0 1px 3px rgba(0,0,0,0.12));
+        }
+    @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15); 
+            }
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1874&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+            color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: scroll;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInSlideUp 1s ease-out forwards;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a5276;
+            font-size: 2.8em;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInSlideUp 1s ease-out 0.5s forwards;
+        }
+
+        h1 .emoji {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        h1:hover .emoji {
+            animation: pulse 1s infinite;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto 20px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.7);
+            animation: fadeInSlideUp 1s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        #myChart {
+            margin-top: 30px;
+        }
+
+        /* Tabel baru */
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            overflow: hidden;
+            animation: fadeInSlideUp 1s ease-out 1s forwards;
+        }
+
+        .ranking-table th,
+        .ranking-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .ranking-table th {
+            background-color: #1a5276;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .ranking-table tr:hover {
+            background-color: rgba(26, 82, 118, 0.1);
+        }
+
+        .up {
+            color: green;
+            font-weight: bold;
+        }
+
+        .down {
+            color: red;
+            font-weight: bold;
+        }
+
+        /* Responsive for mobile and tablet */
+        @media (max-width: 900px) {
+            .container {
+                padding: 20px;
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+                max-width: 100vw;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
+        }
+        @media (max-width: 425px) {
+            h1 {
+                font-size: 1.3em;
+            }
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+            .container {
+                padding: 5px;
+            }
+        }
+        @media (max-width: 375px) {
+            h1 {
+                font-size: 1.1em;
+            }
+        }
+        @media (max-width: 320px) {
+            h1 {
+                font-size: 1em;
+            }
+        }
+        /* Table horizontal scroll for small screens */
+        @media (max-width: 768px) {
+            .ranking-table {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="klasemenPoin.js"></script>
+    <script src="auth.js"></script>
+</head>
+
+<body>
+    <span class="earth-deco">🌍</span>
+    <img id="phoenixImg" src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Feather_icon_orange.svg" alt="Phoenix Feather" class="phoenix-feather" onerror="this.style.display='none';document.getElementById('phoenixFallback').style.display='block'">
+    <span id="phoenixFallback" class="phoenix-feather-fallback" aria-hidden="true" style="display:none">🪶</span>
+    <div class="container py-4" style="background-image: linear-gradient(135deg, rgba(34,139,34,0.08) 0%, rgba(135,206,250,0.08) 100%), url('https://www.transparenttextures.com/patterns/leaf.png'); background-repeat: repeat;">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <img src="logo.jpg" alt="Logo" class="logo">
+                    <div>
+                        <h2 class="mb-0">HASIL PENILAIAN TUGAS POSTER</h2>
+                        <small class="text-muted">SPATIAL DTK</small>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button id="editScoresBtn" class="btn btn-sm btn-outline-primary">Edit Scores</button>
+                    <span id="authBadge" class="badge bg-success ms-2 d-none"></span>
+                    <button id="logoutBtn" class="btn btn-sm btn-outline-secondary d-none">Logout</button>
+                    <div class="text-end fs-4">🌍</div>
+                </div>
+            </div>
+            <div class="card-body">
+                
+        <canvas id="myChart"></canvas>
+
+            <!-- Tabel Klasemen Baru -->
+            <div class="table-responsive mt-3">
+            <table id="rankingTable" class="table table-striped table-hover ranking-table align-middle">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Gugus</th>
+                    <th>Nilai</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        </div>
+
+        <!-- Edit modal + Login-by-email modal -->
+        <div class="modal fade" id="editScoresModal" tabindex="-1" aria-labelledby="editScoresModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editScoresModalLabel">Edit Skor (Tugas 1-5)</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body"><div id="editorForm"></div></div>
+              <div class="modal-footer">
+                <button type="button" id="saveScoresBtn" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+                <div class="modal fade" id="emailLoginModal" tabindex="-1" aria-labelledby="emailLoginModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="emailLoginModalLabel">Masuk (Username & Password)</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <label class="form-label">Username</label>
+                                <input id="loginUserInput" type="text" class="form-control" placeholder="username">
+                                <label class="form-label mt-2">Password</label>
+                                <input id="loginPassInput" type="password" class="form-control" placeholder="password">
+                                <div class="form-text">Masukkan username dan password yang diberikan untuk mengubah skor.</div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="userLoginBtn" class="btn btn-primary">Masuk</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    (function(){
+        try{
+            console.log('SPATIAL script start');
+        const STORAGE_KEY = 'spatialDetail_v1';
+        const AUTH_KEY = 'spatial_editor_user_v1';
+
+        function loadDetail(){
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if(raw){
+                try{ return JSON.parse(raw); } catch(e){ console.warn('invalid stored detail', e); }
+            }
+            return JSON.parse(JSON.stringify(klasemenDetail || []));
+        }
+        function saveDetail(data){
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        let detailData = loadDetail();
+
+        // chart setup
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const barColors = ['#27ae60', '#2980b9', '#8e44ad', '#f39c12', '#d35400', '#c0392b', '#16a085', '#34495e', '#7f8c8d'];
+        const barColorsHover = ['#43e97b', '#5dade2', '#bb8fce', '#ffe082', '#ffb074', '#ff7675', '#48c9b0', '#85929e', '#b2bec3'];
+
+        function totalsFromDetail(data){
+            // Use the first tugas value as the representative score (fallback to poin)
+            return data.map(t => {
+                if (Array.isArray(t.tugas) && t.tugas.length) return Number(t.tugas[0]) || 0;
+                if (typeof t.poin !== 'undefined') return Number(t.poin) || 0;
+                return 0;
+            });
+        }
+
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: { labels: detailData.map(t=>t.name), datasets: [{ label: 'Poin Tim', data: totalsFromDetail(detailData), backgroundColor: barColors, borderColor: 'rgba(255,255,255,0.5)', borderWidth:2, borderRadius:8 }] },
+            options: { responsive:true }
+        });
+
+        function renderRankingTable(){
+            const tbody = document.querySelector('#rankingTable tbody');
+            tbody.innerHTML = '';
+            const teams = detailData.map(d => ({ name: d.name, tugasVal: (Array.isArray(d.tugas) && d.tugas.length) ? d.tugas[0] : (d.poin || 0) }));
+            teams.sort((a,b)=> Number(b.tugasVal || 0) - Number(a.tugasVal || 0));
+            teams.forEach((team,i)=>{
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${i+1}</td>
+                    <td>${team.name}</td>
+                    <td>${team.tugasVal}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateChartAndTable(){
+            chart.data.labels = detailData.map(t=>t.name);
+            chart.data.datasets[0].data = totalsFromDetail(detailData);
+            chart.update();
+            renderRankingTable();
+        }
+
+        updateChartAndTable();
+
+        // auth / editor wiring
+        const editBtn = document.getElementById('editScoresBtn');
+        const authBadge = document.getElementById('authBadge');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const editorForm = document.getElementById('editorForm');
+        const editModalEl = document.getElementById('editScoresModal');
+        const emailLoginModalEl = document.getElementById('emailLoginModal');
+        const bsEditModal = (typeof bootstrap !== 'undefined' && editModalEl) ? new bootstrap.Modal(editModalEl) : null;
+        const bsEmailModal = (typeof bootstrap !== 'undefined' && emailLoginModalEl) ? new bootstrap.Modal(emailLoginModalEl) : null;
+
+        function getAuthUser(){ return sessionStorage.getItem(AUTH_KEY) || null; }
+        function isAuthUser(){ const u = getAuthUser(); return !!u; }
+        function setAuthUI(){ const u = getAuthUser(); if(u){ const acct = (typeof allowedUsers !== 'undefined' && Array.isArray(allowedUsers)) ? allowedUsers.find(a=>a.username===u) : null; authBadge.textContent = acct ? acct.display : u; authBadge.classList.remove('d-none'); logoutBtn.classList.remove('d-none'); } else { authBadge.classList.add('d-none'); logoutBtn.classList.add('d-none'); } }
+        setAuthUI();
+
+        function openEditor(){
+            if(!editorForm) return;
+            const rows = detailData.map((team, ti)=>{
+                // single tugas input (use first tugas if available, else poin)
+                const val = (Array.isArray(team.tugas) && team.tugas.length) ? team.tugas[0] : (team.poin || '');
+                const input = `<td><input type="number" class="form-control form-control-sm" data-team="${ti}" data-task="0" value="${val}"></td>`;
+                return `<tr><td>${ti+1}</td><td>${team.name}</td>${input}</tr>`;
+            }).join('');
+            editorForm.innerHTML = `
+                <div class="table-responsive">
+                    <table class="table table-sm table-borderless align-middle">
+                        <thead><tr><th>#</th><th>Nama Tim</th><th>Tugas</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div>`;
+            if(bsEditModal) bsEditModal.show();
+        }
+
+        if(editBtn){
+            editBtn.addEventListener('click', ()=>{
+                if(isAuthUser()){ openEditor(); }
+                else { if(bsEmailModal) bsEmailModal.show(); else alert('Login modal tidak tersedia'); }
+            });
+        }
+
+        // login by username/password (client-side allowedUsers from auth.js)
+        const userLoginBtn = document.getElementById('userLoginBtn');
+        if(userLoginBtn){
+            userLoginBtn.addEventListener('click', ()=>{
+                const userInput = document.getElementById('loginUserInput');
+                const passInput = document.getElementById('loginPassInput');
+                const username = userInput && userInput.value ? userInput.value.trim() : '';
+                const password = passInput && passInput.value ? passInput.value : '';
+                if(!username || !password){ alert('Masukkan username dan password'); return; }
+                if(typeof allowedUsers !== 'undefined' && Array.isArray(allowedUsers)){
+                    const match = allowedUsers.find(a => a.username === username && a.password === password);
+                    if(match){
+                        sessionStorage.setItem(AUTH_KEY, username);
+                        setAuthUI();
+                        if(bsEmailModal) bsEmailModal.hide();
+                        userInput.value = '';
+                        passInput.value = '';
+                        openEditor();
+                        return;
+                    }
+                }
+                alert('Username atau password salah / tidak diizinkan.');
+            });
+        }
+
+        if(logoutBtn){ logoutBtn.addEventListener('click', ()=>{ sessionStorage.removeItem(AUTH_KEY); setAuthUI(); }); }
+
+        // save edited scores
+        const saveBtn = document.getElementById('saveScoresBtn');
+        if(saveBtn){
+            saveBtn.addEventListener('click', ()=>{
+                if(!editorForm) return;
+                const inputs = editorForm.querySelectorAll('input[data-team]');
+                inputs.forEach(inp=>{
+                    const ti = Number(inp.dataset.team);
+                    const v = Number(inp.value);
+                    if(!isNaN(v)){
+                        if(!Array.isArray(detailData[ti].tugas)) detailData[ti].tugas = [];
+                        detailData[ti].tugas[0] = v;
+                    } else {
+                        if(!Array.isArray(detailData[ti].tugas)) detailData[ti].tugas = [];
+                        detailData[ti].tugas[0] = 0;
+                    }
+                });
+                saveDetail(detailData);
+                updateChartAndTable();
+                if(bsEditModal) bsEditModal.hide();
+            });
+        }
+
+        console.log('SPATIAL script end');
+        }catch(err){ console.error('Script error', err); }
+    })();
+    </script>
+</body>
+
+</html>
