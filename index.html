@@ -344,9 +344,13 @@
 
         let detailData = loadDetail();
 
-        // --- Real-time sync via WebSocket ---
+        // --- Real-time sync via WebSocket + HTTP fallback ---
         let ws = null; let wsConnected = false; const WS_RETRY_MS = 3000;
-        const WS_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'ws://localhost:8080' : (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + ':8080';
+        const hostName = location.hostname || 'localhost';
+        const wsProto = (location.protocol === 'https:') ? 'wss:' : 'ws:';
+        const httpProto = (location.protocol === 'https:') ? 'https:' : 'http:';
+        const WS_URL = wsProto + '//' + hostName + ':8080';
+        const HTTP_BASE = httpProto + '//' + hostName + ':8080';
 
         function setupWebSocket(){
             try{
@@ -368,13 +372,26 @@
                 }catch(e){ console.warn('WS msg parse', e); }
             });
             ws.addEventListener('close', ()=>{ wsConnected = false; console.log('WS closed'); scheduleWsReconnect(); });
-            ws.addEventListener('error', (e)=>{ wsConnected = false; console.warn('WS error', e); ws.close && ws.close(); scheduleWsReconnect(); });
+            ws.addEventListener('error', (e)=>{ wsConnected = false; console.warn('WS error', e); try{ ws.close(); }catch(_){} scheduleWsReconnect(); });
         }
 
         let wsReconnectTimer = null;
         function scheduleWsReconnect(){ if(wsReconnectTimer) return; wsReconnectTimer = setTimeout(()=>{ wsReconnectTimer=null; setupWebSocket(); }, WS_RETRY_MS); }
         // start websocket (best-effort). If server not present, client continues to work offline.
         setupWebSocket();
+
+        // If websocket isn't available, try loading server state via HTTP GET
+        function tryHttpInit(){
+            fetch(HTTP_BASE + '/data').then(r=>{ if(!r.ok) throw new Error('no'); return r.json(); }).then(obj=>{
+                if(obj && Array.isArray(obj.data)){
+                    // prefer server data only if localStorage empty
+                    const local = localStorage.getItem(STORAGE_KEY);
+                    if(!local){ detailData = obj.data; saveDetail(detailData); updateChartAndTable(); }
+                }
+            }).catch(()=>{/* ignore */});
+        }
+        // try HTTP init in parallel
+        tryHttpInit();
 
         // chart setup
         const ctx = document.getElementById('myChart').getContext('2d');
@@ -506,8 +523,13 @@
                 });
                 saveDetail(detailData);
                 updateChartAndTable();
-                // broadcast to server if connected
-                try{ if(ws && wsConnected){ ws.send(JSON.stringify({ type:'update', data: detailData })); } }catch(e){ console.warn('ws send failed', e); }
+                // broadcast to server: prefer WS, fallback to HTTP POST
+                try{
+                    if(ws && wsConnected){ ws.send(JSON.stringify({ type:'update', data: detailData })); }
+                    else {
+                        fetch(HTTP_BASE + '/update', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ data: detailData }) }).catch(err=>console.warn('HTTP update failed', err));
+                    }
+                }catch(e){ console.warn('broadcast failed', e); }
                 if(bsEditModal) bsEditModal.hide();
             });
         }

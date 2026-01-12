@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
 const WebSocket = require('ws');
 
 const PORT = process.env.PORT || 8080;
@@ -13,11 +14,40 @@ try{
   }
 }catch(e){ console.warn('Failed to read data file', e); }
 
-const wss = new WebSocket.Server({ port: PORT }, () => console.log(`WS server listening on ${PORT}`));
-
 function persist(){
   try{ fs.writeFileSync(DATA_FILE, JSON.stringify(detailData, null, 2)); }catch(e){ console.warn('persist failed', e); }
 }
+
+const server = http.createServer((req, res) => {
+  // Simple JSON endpoints for clients to fallback
+  if (req.method === 'GET' && req.url === '/data'){
+    res.writeHead(200, {'Content-Type':'application/json'});
+    return res.end(JSON.stringify({ type: 'data', data: detailData }));
+  }
+  if (req.method === 'POST' && req.url === '/update'){
+    let body = '';
+    req.on('data', chunk => body += chunk);
+    req.on('end', ()=>{
+      try{
+        const msg = JSON.parse(body);
+        if(Array.isArray(msg.data)){
+          detailData = msg.data;
+          persist();
+          // broadcast to ws clients
+          broadcast({ type: 'update', data: detailData });
+          res.writeHead(200, {'Content-Type':'application/json'});
+          return res.end(JSON.stringify({ ok:true }));
+        }
+      }catch(e){ /* fallthrough */ }
+      res.writeHead(400); res.end('invalid');
+    });
+    return;
+  }
+  // default: not found
+  res.writeHead(404); res.end('Not found');
+});
+
+const wss = new WebSocket.Server({ server });
 
 function broadcast(obj, wsExclude){
   const msg = JSON.stringify(obj);
@@ -40,4 +70,6 @@ wss.on('connection', (ws) => {
   });
 });
 
-process.on('SIGINT', ()=>{ console.log('SIGINT, shutting down'); wss.close(()=>process.exit()); });
+server.listen(PORT, () => console.log(`Server listening on ${PORT}`));
+
+process.on('SIGINT', ()=>{ console.log('SIGINT, shutting down'); server.close(()=>process.exit()); });
