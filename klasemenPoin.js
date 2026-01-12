@@ -15,13 +15,13 @@ const klasemenPoin = [
 
 // Data detail penugasan untuk 9 tim
 const klasemenDetail = [
-  { name: 'Geo Kusala', tugas: [64, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] },
-  { name: 'Aero Netra', tugas: [55, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] },
-  { name: 'Jalacise', tugas: [66, "Coming soon", "Coming soon",  "Coming soon", "Coming soon"] },
-  { name: 'Vajra Vium', tugas: [92, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] },
-  { name: 'Dhatu Stream', tugas: [47, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] },
-  { name: 'Infra Luhita', tugas: [68, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] },
-  { name: 'Loka Map', tugas: [82, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] },
-  { name: 'Nira Nautika', tugas: [58, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] },
-  { name: 'Giridera', tugas: [52, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] }
+  { name: 'Geo Kusala', tugas: [89.1, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] },
+  { name: 'Aero Netra', tugas: [86.7, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] },
+  { name: 'Jalacise', tugas: [90.9, "Coming soon", "Coming soon",  "Coming soon", "Coming soon"] },
+  { name: 'Vajra Vium', tugas: [87.9, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] },
+  { name: 'Dhatu Stream', tugas: [86.3, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] },
+  { name: 'Infra Luhita', tugas: [81.4, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] },
+  { name: 'Loka Map', tugas: [85.6, "Coming soon", " Coming Soon", 50, 50] },
+  { name: 'Nira Nautika', tugas: [91.15, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] },
+  { name: 'Giridera', tugas: [89.35, "Coming soon", "Coming soon", "Coming soon", "Coming soon"] }
 ];
