@@ -3,6 +3,6 @@
 // Use a proper backend or auth provider for real security.
 
 const allowedUsers = [
-    { username: 'admin', password: 'admin123', display: 'Panitia' },
+    { username: 'AdminSPATIAL', password: 'SPATIALanjayy', display: 'Panitia' },
     { username: 'naufal', password: 'naufalpass', display: 'Naufal' }
 ];
